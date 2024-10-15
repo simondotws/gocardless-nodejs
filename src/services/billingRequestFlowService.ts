@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
-import { Api } from '../api/api';
-import * as Types from '../types/Types';
+import { Api } from "../api/api";
+import * as Types from "../types/Types";
 
 interface BillingRequestFlowResponse
   extends Types.BillingRequestFlow,
@@ -94,6 +94,10 @@ interface BillingRequestFlowCreateRequest {
   // automatic redirections are not possible.
 
   show_success_redirect_button?: boolean;
+
+  // If true, the payer will skip the payment success screen and be redirected
+  // automatically upon completion of the flow.
+  skip_success_screen?: boolean;
 }
 
 export class BillingRequestFlowService {
@@ -105,16 +109,16 @@ export class BillingRequestFlowService {
 
   async create(
     requestParameters: BillingRequestFlowCreateRequest,
-    idempotencyKey = '',
+    idempotencyKey = "",
     customHeaders: Types.JsonMap = {}
   ): Promise<BillingRequestFlowResponse> {
     const urlParameters = [];
     const requestParams = {
-      path: '/billing_request_flows',
-      method: 'post',
+      path: "/billing_request_flows",
+      method: "post",
       urlParameters,
       requestParameters,
-      payloadKey: 'billing_request_flows',
+      payloadKey: "billing_request_flows",
       idempotencyKey,
       customHeaders,
       fetch: undefined,
@@ -122,7 +126,7 @@ export class BillingRequestFlowService {
 
     const response = await this.api.request(requestParams);
     const formattedResponse: BillingRequestFlowResponse = {
-      ...(response.body?.['billing_request_flows'] ?? response),
+      ...(response.body?.["billing_request_flows"] ?? response),
       __response__: response.__response__,
     };
 
@@ -130,10 +134,10 @@ export class BillingRequestFlowService {
   }
 
   async initialise(identity: string): Promise<BillingRequestFlowResponse> {
-    const urlParameters = [{ key: 'identity', value: identity }];
+    const urlParameters = [{ key: "identity", value: identity }];
     const requestParams = {
-      path: '/billing_request_flows/:identity/actions/initialise',
-      method: 'post',
+      path: "/billing_request_flows/:identity/actions/initialise",
+      method: "post",
       urlParameters,
 
       payloadKey: null,
@@ -142,7 +146,7 @@ export class BillingRequestFlowService {
 
     const response = await this.api.request(requestParams);
     const formattedResponse: BillingRequestFlowResponse = {
-      ...response.body['billing_request_flows'],
+      ...response.body["billing_request_flows"],
       __response__: response.__response__,
     };
 
